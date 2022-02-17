@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+    mobile-app:
+        build: .
+        container_name: night-owl
+        volumes:
+            - ./:/app:delegated
+            - /app/node_modules
+        ports:
+            - '19006:19006'
+            - '19001:19001'
+            - '19002:19002'
+            - '19003:19003'
+            - '19000:19000'
+        command: yarn start

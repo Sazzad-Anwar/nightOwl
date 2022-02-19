@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const loginStyles = StyleSheet.create({
     container: {
-        paddingTop: 0
+        paddingTop: 0,
     },
     upperBody: {
         zIndex: 1,

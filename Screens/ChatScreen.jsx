@@ -59,7 +59,7 @@ const ChatScreen = ({ route, navigation }) => {
             <Box flex="1">
                 <FlatList
                     contentContainerStyle={{
-                        marginBottom: 50
+                        marginBottom: 150,
                     }}
                     keyExtractor={(item) => item.id.toString()}
                     ref={(ref) => msgArea = ref}
@@ -116,6 +116,7 @@ const ChatScreen = ({ route, navigation }) => {
                         w="85%"
                         color="white"
                         fontSize="md"
+                        autoFocus={true}
                         value={message}
                         borderColor="#242850"
                         _focus={{ borderColor: '#242850' }}

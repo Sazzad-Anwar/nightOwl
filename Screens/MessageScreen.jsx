@@ -14,7 +14,7 @@ const MessageScreen = ({ navigation }) => {
 
     const searchHandler = (text) => {
         setSearch(text);
-        let searchData = data.filter(item => item.fullName.toLowerCase().includes(text.toLowerCase()));
+        let searchData = Users.filter(item => item.fullName.toLowerCase().includes(text.toLowerCase()));
         if (searchData.length > 0) {
             setUserData(searchData);
         }

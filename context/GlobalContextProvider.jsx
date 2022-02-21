@@ -6,13 +6,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import postReducer from './Reducers/PostReducer';
 import { Colors } from '../StaticDB/ColorCode';
 import { Users } from '../StaticDB/Users'
+import { Videos } from '../StaticDB/Video';
+import { PostData } from '../StaticDB/PostData';
+import { RandomPhotos } from '../StaticDB/RandomPhotos';
 export const useGlobalContext = () => useContext(GlobalContext);
 // let SOCKET_ENDPOINT = 'https://socket-sdk.herokuapp.com/chat'
 let SOCKET_ENDPOINT = 'http://localhost:4000/api'
 
 let initialState = {
     user: {},
-    posts: []
+    posts: [],
+    videoPost: [],
 };
 
 
@@ -34,6 +38,19 @@ const GlobalContextProvider = ({ children }) => {
 
     }, [])
 
+    Users.map(user => {
+        initialState.videoPost.push({
+            "id": (Math.ceil(Math.random() * Colors.length)).toString() + (Math.ceil(Math.random() * Colors.length)).toString() + user.id,
+            "createdAt": new Date().toISOString(),
+            "video": Videos[parseInt(Math.random() * Videos.length)],
+            "user": {
+                "email": user.fullName.split(' ')[0].toLowerCase() + '@gmail.com',
+                "isLoggedIn": true,
+                "photoUrl": user.avatarUrl,
+                "userName": user.fullName,
+            },
+        })
+    })
 
     Users.map(user => {
         initialState.posts.push({
@@ -42,6 +59,24 @@ const GlobalContextProvider = ({ children }) => {
             "id": (Math.ceil(Math.random() * Colors.length)).toString() + (Math.ceil(Math.random() * Colors.length)).toString() + user.id,
             "isPublic": true,
             "postData": user.recentText,
+            "postDataDetails": PostData[parseInt(Math.random() * PostData.length)].body,
+            "images": parseInt(Math.random() * Users.length) % 2 === 0 ? [
+                {
+                    "url": RandomPhotos[parseInt(Math.random() * RandomPhotos.length)].urls,
+                },
+                {
+                    "url": RandomPhotos[parseInt(Math.random() * RandomPhotos.length)].urls,
+                },
+                {
+                    "url": RandomPhotos[parseInt(Math.random() * RandomPhotos.length)].urls,
+                },
+                {
+                    "url": RandomPhotos[parseInt(Math.random() * RandomPhotos.length)].urls,
+                },
+                {
+                    "url": RandomPhotos[parseInt(Math.random() * RandomPhotos.length)].urls,
+                }
+            ] : [],
             "user": {
                 "email": user.fullName.split(' ')[0].toLowerCase() + '@gmail.com',
                 "isLoggedIn": true,
@@ -55,7 +90,15 @@ const GlobalContextProvider = ({ children }) => {
     const [posts, postDispatch] = useReducer(postReducer, initialState.posts)
 
     return (
-        <GlobalContext.Provider value={{ user, userDispatch, socket: socketRef.current, posts, postDispatch }}>
+        <GlobalContext.Provider value={{
+            user,
+            userDispatch,
+            socket: socketRef.current,
+            posts,
+            postDispatch,
+            videoPost: initialState.videoPost,
+        }}
+        >
             {children}
         </GlobalContext.Provider>
     )

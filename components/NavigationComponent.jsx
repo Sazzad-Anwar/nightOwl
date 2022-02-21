@@ -11,8 +11,10 @@ import RegistrationScreen from '../Screens/RegistrationScreen';
 import { useGlobalContext } from '../context/GlobalContextProvider';
 import AddPostScreen from '../Screens/AddPostScreen';
 import Profile from '../Screens/Profile';
-import PostDetails from '../Screens/PostDetails';
+import Comment from '../Screens/Comment';
 import UserProfile from '../Screens/UserProfile';
+import ImagePostDetails from '../Screens/ImagePostDetails';
+import ViewFullImage from '../Screens/ViewFullImage';
 
 const Stack = createNativeStackNavigator();
 
@@ -97,8 +99,8 @@ const NavigationComponent = () => {
                         }}
                     />
                     <Stack.Screen
-                        name="PostDetails"
-                        component={PostDetails}
+                        name="Comment"
+                        component={Comment}
                         options={{
                             headerShown: false,
                             animation: 'slide_from_bottom'
@@ -110,6 +112,22 @@ const NavigationComponent = () => {
                         options={{
                             headerShown: false,
                             animation: 'fade_from_bottom'
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ImagePostDetails"
+                        component={ImagePostDetails}
+                        options={{
+                            headerShown: false,
+                            animation: 'slide_from_bottom'
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ViewFullImage"
+                        component={ViewFullImage}
+                        options={{
+                            headerShown: false,
+                            animation: 'slide_from_bottom'
                         }}
                     />
                 </>

@@ -1,17 +1,21 @@
-import { Avatar, Box, Text, View } from 'native-base'
+import { Avatar, Box, FlatList, Image, Text, View } from 'native-base'
 import React, { useState } from 'react'
 import moment from 'moment';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
+import { Dimensions, TouchableOpacity } from 'react-native';
 
-const PostCard = ({ item, setCardHeight, navigation }) => {
+const PostCard = ({ item, index, setCardHeight, navigation }) => {
 
     const [isLiked, setIsLiked] = useState(false);
+
+    const { height, width } = Dimensions.get('window');
 
     const onLayout = (event) => {
         const { height } = event.nativeEvent.layout;
         setCardHeight(height)
     }
+
+    let postDetails = item;
 
     return (
 
@@ -47,9 +51,47 @@ const PostCard = ({ item, setCardHeight, navigation }) => {
                 </Box>
             </TouchableOpacity>
             <Box my="2" w="100%" style={{ height: 0.2 }} bg="#6c75e0" />
-            <Box flexDir="row" justifyContent="center" alignItems="center" textAlign="center" px="3" py="4" w="100%" minH="200" bg={item.bg}>
-                <Text fontWeight="semibold" fontSize="20" color="white">{item.postData}</Text>
-            </Box>
+
+            {!item.images.length ?
+                <Box flexDir="row" justifyContent="center" alignItems="center" textAlign="center" px="3" py="4" w="100%" minH="200" bg={item.images.length ? 'transparent' : item.bg}>
+                    <Text fontWeight="semibold" fontFamily="Ubuntu_400Regular" fontSize="20" color="white">
+                        {item.postData}
+                    </Text>
+                </Box> :
+                <Box mb="0" mb="3" w="100%" bg={item.images.length ? 'transparent' : item.bg}>
+                    <Text mx="2" mt="3" fontFamily="Ubuntu_400Regular" fontSize={12} color="white">
+                        {item.postDataDetails}
+                    </Text>
+                </Box>
+            }
+
+            {item.images.length > 0 ?
+                <FlatList
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    data={item.images}
+                    keyExtractor={(item) => item.url.regular + '-' + parseInt(Math.random() * 10000)}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={() => navigation.navigate({
+                            name: 'ImagePostDetails',
+                            params: postDetails
+                        })}>
+                            <Box flexDir="row" alignItems="center" justifyContent="space-between">
+                                <Image mx="1" borderRadius="4" source={{
+                                    uri: item.url.regular,
+                                    height: 400,
+                                    width: width / 2
+                                }}
+                                    alt="Alternate Text"
+                                    size="xl"
+
+                                />
+                            </Box>
+                        </TouchableOpacity>
+                    )}
+                /> : null}
+
+
             <Box p="2" pb="0" flexDir="row" justifyContent="space-between" alignItems="center">
                 <Box flexDir="row" alignItems="center">
                     <MaterialCommunityIcons name="thumb-up-outline" size={18} color="white" />
@@ -70,7 +112,7 @@ const PostCard = ({ item, setCardHeight, navigation }) => {
                     </Box>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate({
-                    name: 'PostDetails',
+                    name: 'Comment',
                     params: {
                         item: item.id
                     }

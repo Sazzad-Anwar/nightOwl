@@ -15,13 +15,17 @@
         },
         "assetBundlePatterns": ["**/*"],
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "com.pagepro.testpublishapp",
+            "buildNumber": "1.0.0"
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#242850"
-            }
+            },
+            "package": "com.pagepro.testpublishapp",
+            "versionCode": 1
         },
         "web": {
             "favicon": "./assets/favicon.png"

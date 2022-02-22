@@ -95,10 +95,9 @@ const VideoTabScreen = ({ navigation }) => {
                         colors={['#1B1E3C', '#242850']}
                     />
                 }
-                removeClippedSubviews={true}
-                maxToRenderPerBatch={10}
-                updateCellsBatchingPeriod={100}
-                initialNumToRender={10}
+                removeClippedSubviews={false}
+                maxToRenderPerBatch={5}
+                initialNumToRender={5}
                 // initialScrollIndex={videoPost.length - 1}
                 progressViewOffset={100}
                 onEndReachedThreshold={0.1}

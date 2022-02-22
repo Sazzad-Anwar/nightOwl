@@ -26,9 +26,13 @@ const ViewFullImage = ({ route, navigation }) => {
     useEffect(() => {
 
         if (image.isMyDay && timerWidth < 110) {
-            setInterval(() => {
+            const ViewImageInterVal = setInterval(() => {
                 setTimerWidth(timerWidth => timerWidth + 10);
             }, 2200)
+
+            return () => {
+                clearInterval(ViewImageInterVal);
+            }
         }
 
     }, [timerWidth])
@@ -42,27 +46,23 @@ const ViewFullImage = ({ route, navigation }) => {
                 }, 8000)
             }}>
                 {image.isMyDay &&
-                    <>
-                        {/* <Box position="absolute" top="5" mx="2" w="95%" borderRadius="full" h={.5} p={0.5} bg="white" />
-                        <Box position="absolute" top="5" mx="2" w={`${timerWidth}%`} borderRadius="full" h={.5} p={0.5} bg="#6c75e0" /> */}
-                        <Slider
-                            thumbStyle={{
-                                width: 0,
-                            }}
-                            containerStyle={{
-                                marginLeft: 10,
-                                marginRight: 10
-                            }}
-                            value={timerWidth}
-                            minimumValue={0}
-                            maximumValue={100}
-                            animateTransitions={true}
-                            minimumTrackTintColor="#6c75e0"
-                            thumbTintColor="#6c75e0"
-                            thumbTouchSize={{ width: 0, height: 0 }}
-                            animationType="timing"
-                        />
-                    </>
+                    <Slider
+                        thumbStyle={{
+                            width: 0,
+                        }}
+                        containerStyle={{
+                            marginLeft: 10,
+                            marginRight: 10
+                        }}
+                        value={timerWidth}
+                        minimumValue={0}
+                        maximumValue={100}
+                        animateTransitions={true}
+                        minimumTrackTintColor="#6c75e0"
+                        thumbTintColor="#6c75e0"
+                        thumbTouchSize={{ width: 0, height: 0 }}
+                        animationType="timing"
+                    />
                 }
                 <View flexDir="row" h={height} w={width} justifyContent="center" alignItems="center">
                     <Image source={{

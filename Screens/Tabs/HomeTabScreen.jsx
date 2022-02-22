@@ -16,8 +16,8 @@ const HomeTabScreen = ({ navigation }) => {
     const [cardHeight, setCardHeight] = useState(0);
     const { user, socket } = useGlobalContext()
     const { posts } = useGlobalContext()
-    let flatListRef = useRef(null);
-    let imageFlatList = useRef(null);
+    let flatListRef;
+    let imageFlatList;
     const { height, width } = Dimensions.get('window');
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [userPosts, setUserPosts] = useState([]);
@@ -71,6 +71,16 @@ const HomeTabScreen = ({ navigation }) => {
         }, 100); // You may choose to skip this line if the above typically works well because your average item height is accurate.
     }
 
+    const PostItemsRender = ({ item, index }) => {
+        return (
+            <PostCard item={item} index={index} setCardHeight={setCardHeight} navigation={navigation} />
+        )
+    }
+
+    const PostsKeyExtractor = (item, index) => {
+        return item.id.toString()
+    }
+
     return (
         <Layout>
             <Box mx="2" mt="3" flexDir="row" justifyContent="space-between" alignItems="center">
@@ -95,11 +105,14 @@ const HomeTabScreen = ({ navigation }) => {
             {/* my day list */}
             <View mt="2" flexDir="row">
                 <FlatList
-                    ref={imageFlatList}
+                    ref={(ref) => imageFlatList = ref}
                     horizontal={true}
                     data={myDays}
                     legacyImplementation={false}
                     disableScrollViewPanResponder={true}
+                    removeClippedSubviews={false}
+                    maxToRenderPerBatch={5}
+                    initialNumToRender={5}
                     ListEmptyComponent={() => <EmptyMyDay />}
                     refreshControl={
                         <RefreshControl
@@ -142,15 +155,14 @@ const HomeTabScreen = ({ navigation }) => {
             <View my="2">
                 <FlatList
                     contentContainerStyle={{ paddingBottom: 175 }}
-                    ref={flatListRef}
+                    ref={(ref) => flatListRef = ref}
                     height="100%"
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={PostsKeyExtractor}
                     data={userPosts}
                     extraData={userPosts}
-                    legacyImplementation={false}
                     // inverted={true}
                     viewabilityConfig={{
-                        waitForInteraction: true,
+                        waitForInteraction: false,
                         itemViewAreaPercentThreshold: 10,
                     }}
                     getItemLayout={(data, index) => ({
@@ -159,11 +171,6 @@ const HomeTabScreen = ({ navigation }) => {
                         animated: true,
                         index,
                     })}
-                    shouldComponentUpdate={(nextProps, nextState) => {
-                        if (nextProps.data !== this.props.data) {
-                            return true;
-                        }
-                    }}
                     refreshControl={
                         <RefreshControl
                             refreshing={isRefreshing}
@@ -173,15 +180,12 @@ const HomeTabScreen = ({ navigation }) => {
                     }
                     ListEmptyComponent={() => <EmptyPostList />}
                     onScrollToIndexFailed={scrollToIndexFailed}
-                    removeClippedSubviews={true}
-                    maxToRenderPerBatch={10}
-                    updateCellsBatchingPeriod={100}
-                    initialNumToRender={10}
+                    removeClippedSubviews={false}
+                    maxToRenderPerBatch={5}
+                    initialNumToRender={5}
                     disableScrollViewPanResponder={true}
                     // initialScrollIndex={posts.length - 1}
-                    progressViewOffset={100}
-                    onEndReachedThreshold={0.1}
-                    renderItem={({ item, index }) => <PostCard item={item} index={index} setCardHeight={setCardHeight} navigation={navigation} />}
+                    renderItem={PostItemsRender}
                 />
             </View>
 
